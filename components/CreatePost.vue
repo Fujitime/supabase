@@ -72,3 +72,7 @@ export default {
     components: { Editor }
 };
 </script>
+
+curl '' \
+-H "apikey: SUPABASE_KEY" \
+-H "Authorization: Bearer SUPABASE_KEY"
