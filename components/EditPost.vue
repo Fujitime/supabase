@@ -61,7 +61,7 @@ export default {
           }),
           {
             headers: {
-              'apikey': process.env.API_KEY,
+              'apikey': this.$config.apikey,
               'Content-Type': 'application/json',
             },
           }
@@ -79,7 +79,7 @@ export default {
             `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?slug=eq.${this.slug}`,
             {
               headers: {
-                'apikey': process.env.API_KEY,
+                'apikey': this.$config.apikey,
                 'Content-Type': 'application/json',
               },
             }
@@ -122,7 +122,7 @@ export default {
     this.fetchPostData();
     axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
       headers: {
-          'apikey': process.env.API_KEY,
+          'apikey': this.$config.apikey,
           'content-type': 'application/json'
       }
     }).then(({data}) => {

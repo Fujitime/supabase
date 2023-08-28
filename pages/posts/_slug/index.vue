@@ -16,11 +16,11 @@
 <script>
 import axios from 'axios';
 export default {
-  async asyncData({ params }) {
+  async asyncData({ params, $config }) {
     const slug = params.slug;
     const { data: postData } = await axios.get(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?slug=eq.${slug}`, {
       headers: {
-        'apikey': process.env.API_KEY,
+        'apikey': $config.apikey,
         'content-type': 'application/json',
       },
     });
