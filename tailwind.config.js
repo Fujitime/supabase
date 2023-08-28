@@ -33,9 +33,6 @@ module.exports = {
         rd: '0 .12rem 0 rgb(0, 0, 0)',
         wt: '.23rem 0 0 rgb(255, 255, 255)',
       },
-      fontFamily: {
-        sans: ['Comfortaa', 'cursive']
-      }
     },
   },
   plugins: [],
