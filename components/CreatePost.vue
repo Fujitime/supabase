@@ -39,7 +39,6 @@
     </form>
   </div>
 </template>
-
 <script>
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -67,7 +66,7 @@ export default {
               }),
                 {
                   headers: {
-                  'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
+                  'apikey': process.env.API_KEY,
                   'content-type': 'application/json',
                   }
                 }
