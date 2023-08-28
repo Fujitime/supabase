@@ -3,9 +3,9 @@
       <CreatePost/>
     </div>
   </template>
-  
+
   <script>
-  import CreatePost from '../../components/CreatePost.vue';
+  import CreatePost from '~/components/CreatePost.vue';
   export default {
     name: 'CreatePostPage',
     components: {
@@ -13,4 +13,3 @@
     },
   };
   </script>
-  
