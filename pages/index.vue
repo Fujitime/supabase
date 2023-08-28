@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CreatePost from './CreatePost.vue';
+import CreatePost from '../components/CreatePost.vue';
 export default {
   name: 'IndexPage',
   components: {
