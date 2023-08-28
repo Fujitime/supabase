@@ -38,6 +38,10 @@ export default {
     ['@nuxtjs/dotenv', { filename: '.env' }]
   ],
 
+  publicRuntimeConfig:{
+    apikey: process.env.API_KEY
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },

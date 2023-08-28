@@ -36,7 +36,7 @@ export default {
                 name: this.category
             }), {
                 headers: {
-                    'apikey': process.env.API_KEY,
+                    'apikey': this.$config.apikey,
                     'Content-Type': 'application/json'
                 }
             })
@@ -47,7 +47,7 @@ export default {
         deleteCategory(id){
             axios.delete(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${id}`, {
                 headers: {
-                    'apikey': process.env.API_KEY,
+                    'apikey': this.$config.apikey,
                     'Content-Type': 'application/json'
                 }
             }).then(() => {
@@ -57,7 +57,7 @@ export default {
         allCategories(){
             axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
             headers: {
-                'apikey': process.env.API_KEY,
+                'apikey': this.$config.apikey,
                 'content-type': 'application/json'
                 }
             }).then(({data}) => {
