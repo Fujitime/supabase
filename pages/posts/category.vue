@@ -1,8 +1,8 @@
 <template>
     <div class="w-full flex justify-center pt-4">
-        <div class="p-2 max-w-[25.8vw] bg-slate-100 rounded-lg">
-            <div class="mb-3 flex gap-1">
-                <input type="text" v-model="category" class="border-none focus:outline-none bg-gray-100 focus:bg-gray-200 rounded-lg text-lg px-2 py-1.5" placeholder="Insert category name"/>
+        <div class="p-2 container bg-slate-100 rounded-lg">
+            <div class="mb-3 w-full flex gap-1">
+                <input type="text" v-model="category" class="border-none focus:outline-none bg-gray-100 focus:bg-gray-200 rounded-lg text-lg px-2 py-1.5 w-full" placeholder="Insert category name"/>
                 <button v-on:click="newCategory" class="px-4 py-1.5 bg-gray-700 hover:bg-gray-900 text-white rounded-md">+</button>
             </div>
             <ul class="space-y-2">
@@ -36,7 +36,7 @@ export default {
                 name: this.category
             }), {
                 headers: {
-                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
+                    'apikey': process.env.API_KEY,
                     'Content-Type': 'application/json'
                 }
             })
@@ -47,25 +47,28 @@ export default {
         deleteCategory(id){
             axios.delete(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${id}`, {
                 headers: {
-                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
+                    'apikey': process.env.API_KEY,
                     'Content-Type': 'application/json'
                 }
             }).then(() => {
-                this.categories = this.categories.filter(category => category.category_id !== id);
+                this.allCategories();
+            })
+        },
+        allCategories(){
+            axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
+            headers: {
+                'apikey': process.env.API_KEY,
+                'content-type': 'application/json'
+                }
+            }).then(({data}) => {
+                this.categories = data;
+            }).catch(() => {
+                this.categories = [];
             })
         }
     },
     created(){
-        axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
-            headers: {
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
-                'content-type': 'application/json'
-            }
-        }).then(({data}) => {
-            this.categories = data;
-        }).catch(() => {
-            this.categories = [];
-        })
+        this.allCategories();
     }
 }
 </script>

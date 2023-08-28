@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="p-8">
     <h2 class="text-2xl font-bold mt-8">Edit Post</h2>
     <form @submit.prevent="editPost" class="mt-4">
@@ -6,6 +6,14 @@
         <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
         <input v-model="editedPost.title" type="text" id="title" required class="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200">
       </div>
+      <div class="mb-4">
+        <label for="category" class="block text-sm font-medium text-gray-700">Category:</label>
+        <NuxtLink class="text-blue-700 font-light text-xs -mt-1" to="../category">Manage Category</NuxtLink>
+        <select id="category" v-model="selectedCategory" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[9rem] p-2.5 " required>
+          <option v-for="category in categories" :value="category.category_id" >{{ category.name }}</option>
+        </select>
+      </div>
+
       <editor
         api-key="y6wavuusx1p97c3is204dtbd5rujyn94wh8yh54sy0flklzf"
         class="mb-4"
@@ -29,10 +37,14 @@ import axios from 'axios';
 import Editor from '@tinymce/tinymce-vue';
 
 export default {
+  props: {
+    slug: String
+  },
   data() {
     return {
+      selectedCategory: '',
+      categories: [],
       editedPost: {
-        slug: '',
         title: '',
         body: '',
       },
@@ -41,28 +53,21 @@ export default {
   methods: {
     async editPost() {
       try {
-        const { slug, editedPost } = this;
         const response = await axios.patch(
-          `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?slug=eq.${slug}`,
-          { title: editedPost.title },
-          { body: editedPost.body },
+          `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?slug=eq.${this.slug}`, JSON.stringify({
+              title: this.editedPost.title,
+              body: this.editedPost.body,
+              category_id: this.selectedCategory,
+          }),
           {
             headers: {
-              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
-              'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM`,
+              'apikey': process.env.API_KEY,
               'Content-Type': 'application/json',
-              'Prefer': 'return=minimal',
             },
           }
         );
 
-        if (response.status === 200) {
-          Swal.fire('Success', 'Post updated successfully!', 'success');
-          this.editedPost.title = '';
-          this.editedPost.body = '';
-        } else {
-          Swal.fire('Error', 'Failed to update post!', 'error');
-        }
+        Swal.fire('Success', 'Post updated successfully!', 'success');
       } catch (error) {
         console.error('Error updating post:', error.message);
         Swal.fire('Error', 'An error occurred while updating the post.', 'error');
@@ -71,11 +76,10 @@ export default {
     async fetchPostData() {
         try {
           const response = await axios.get(
-            `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?slug=eq.${this.editedPost.slug}`,
+            `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?slug=eq.${this.slug}`,
             {
               headers: {
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM`,
+                'apikey': process.env.API_KEY,
                 'Content-Type': 'application/json',
               },
             }
@@ -85,6 +89,7 @@ export default {
             const post = response.data[0];
             this.editedPost.title = post.title;
             this.editedPost.body = post.body;
+            this.selectedCategory = post.category_id;
           } else {
             Swal.fire('Error', 'Failed to fetch post data!', 'error');
           }
@@ -115,6 +120,16 @@ export default {
   components: { Editor },
   created() {
     this.fetchPostData();
+    axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
+      headers: {
+          'apikey': process.env.API_KEY,
+          'content-type': 'application/json'
+      }
+    }).then(({data}) => {
+        this.categories = data;
+    }).catch(() => {
+        this.categories = [];
+    })
   },
 };
-</script> -->
+</script>

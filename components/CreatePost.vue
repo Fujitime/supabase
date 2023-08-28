@@ -6,6 +6,13 @@
         <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
         <input v-model="newPost.title" type="text" id="title" required class="mt-1 p-2 w-full border rounded-lg focus:ring focus:ring-blue-200">
       </div>
+      <div class="mb-4">
+        <label for="category" class="block text-sm font-medium text-gray-700">Category:</label>
+        <NuxtLink class="text-blue-700 font-light text-xs -mt-1" to="category">Manage Category</NuxtLink>
+        <select id="category" v-model="selectedCategory" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[9rem] p-2.5 " required>
+          <option v-for="category in categories" :value="category.category_id" >{{ category.name }}</option>
+        </select>
+      </div>
       <editor
         api-key="y6wavuusx1p97c3is204dtbd5rujyn94wh8yh54sy0flklzf" class="mb-4" v-model="newPost.body"
         :init="{
@@ -40,6 +47,8 @@ import Editor from '@tinymce/tinymce-vue';
 export default {
     data() {
         return {
+            selectedCategory: '',
+            categories: [],
             newPost: {
                 title: '',
                 body: '',
@@ -72,6 +81,7 @@ export default {
                         title: this.newPost.title,
                         body: this.newPost.body,
                         slug: slug,
+                        category_id: this.selectedCategory,
                     }),
                     {
                         headers: {
@@ -89,6 +99,18 @@ export default {
                 Swal.fire('Error', 'Gagal menambahkan postingan!', 'warning');
             }
         },
+    },
+    created(){
+      axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
+        headers: {
+            'apikey': process.env.API_KEY,
+            'content-type': 'application/json'
+        }
+      }).then(({data}) => {
+          this.categories = data;
+      }).catch(() => {
+          this.categories = [];
+      })
     },
     components: { Editor },
 };

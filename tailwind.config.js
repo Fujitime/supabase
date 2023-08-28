@@ -9,6 +9,13 @@ module.exports = {
       }
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: '98%'
+          }
+        }
+      },
       colors: {
         primary: '#f2f7f5',
         secondary: '#f5f5f5',
@@ -35,6 +42,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography')
+  ],
 }
 
