@@ -32,7 +32,6 @@
     </form>
   </div>
 </template>
-
 <script>
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -50,20 +49,24 @@ export default {
     methods: {
         async addNewPost() {
             try {
-              console.log(this.newPost.body)
-                const {data: post} = await axios.post('https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts', JSON.stringify({title: this.newPost.title, body: this.newPost.body, slug: this.newPost.title.split(" ").slice(0, 50).join("-")}) ,
-                  {
-                    headers: {
-                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YmhldHNicWV4cWRwd2ZtbWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTMxODgzMjYsImV4cCI6MjAwODc2NDMyNn0.x3WRxU3fKOzeQ3N8aOuaa0Io3DRe1Tv1MtYzX2V_miM',
-                    'content-type': 'application/json',
+                const { data: post } = await axios.post(
+                    'https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts',
+                    JSON.stringify({
+                        title: this.newPost.title,
+                        body: this.newPost.body,
+                        slug: this.newPost.title.split(" ").slice(0, 50).join("-")
+                    }),
+                    {
+                        headers: {
+                            'apikey': process.env.API_KEY,
+                            'content-type': 'application/json',
+                        }
                     }
-                  }
-                )
+                );
                 this.newPost.title = '';
                 this.newPost.body = '';
                 Swal.fire('Success', 'Berhasil menambahkan postingan!', 'success');
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error adding post:', error.message);
                 Swal.fire('Error', 'Gagal menambahkan postingan!', 'warning');
             }
@@ -72,7 +75,3 @@ export default {
     components: { Editor }
 };
 </script>
-
-curl '' \
--H "apikey: SUPABASE_KEY" \
--H "Authorization: Bearer SUPABASE_KEY"
