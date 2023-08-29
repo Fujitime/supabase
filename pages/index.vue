@@ -40,7 +40,7 @@
                 this.selectedCategory = category_id;
                 axios.get(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?is_published=is.true${category_id == 'all' ? '' : '&category_id=eq.' + category_id}`, {
                     headers: {
-                        'apikey': process.env.API_KEY,
+                        'apikey': this.$config.apikey,
                         'content-type': 'application/json',
                     }
                 }).then(({data}) => {
@@ -49,9 +49,10 @@
             }
         },
         created(){
+            this.changeCategory('all')
             axios.get('https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories', {
                 headers: {
-                'apikey': process.env.API_KEY,
+                'apikey': this.$config.apikey,
                 'content-type': 'application/json'
                 }
             }).then(({data}) => {
@@ -60,19 +61,19 @@
                 this.categories = [];
             })
         },
-        async asyncData(){
-            try{
-                const { data: posts } = await axios.get('https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?is_published=is.true', {
-                    headers: {
-                      'apikey': process.env.API_KEY,
-                      'content-type': 'application/json',
-                    }
-                })
-                return { posts }
-            }catch(e){
-                console.log('Error:', e.message)
-                return { posts: []}
-            }
+        async asyncData({ $config }){
+            // try{
+            //     const { data: posts } = await axios.get('https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/posts?is_published=is.true', {
+            //         headers: {
+            //           'apikey': $config.apikey,
+            //           'content-type': 'application/json',
+            //         }
+            //     })
+            //     return { posts }
+            // }catch(e){
+            //     console.log('Error:', e.message)
+            //     return { posts: []}
+            // }
         }
     }
 </script>
