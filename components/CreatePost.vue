@@ -33,7 +33,7 @@
       <div class="flex justify-between">
         <NuxtLink
         to="/"
-        class="py-2 px-3 mt-3 min-w-auto bg-accent-7 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+        class="py-2 px-3 mt-3 min-w-auto bg-accent-5 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
         >
         Cancel
       </NuxtLink>
