@@ -1,5 +1,7 @@
 <template>
-    <div class="w-full flex justify-center pt-4">
+      <div class="w-full min-h-screen bg-slate-100 ">
+      <Navbar/>
+      <div class="max-w-[98%] mx-auto px-2 pt-24">
         <div class="p-2 container bg-slate-100 rounded-lg">
             <div class="mb-3 w-full flex gap-1">
                 <input type="text" v-model="category" class="border-none focus:outline-none bg-gray-100 focus:bg-gray-200 rounded-lg text-lg px-2 py-1.5 w-full" placeholder="Insert category name"/>
@@ -17,12 +19,16 @@
             </ul>
         </div>
     </div>
+</div>
 </template>
 
 <script>
 import axios from 'axios';
-
+import Navbar from '~/components/Navbar.vue';
 export default {
+  components:{
+    Navbar,
+},
     name: "Category",
     data() {
         return {

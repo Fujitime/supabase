@@ -1,9 +1,9 @@
 <template>
   <nav class="fixed w-full p-6 bg-white">
     <div class="flex items-center justify-between">
-      <div>
+      <NuxtLink to="/" >
         <NuxtLogo/>
-      </div>
+      </NuxtLink>
       <div class="md:hidden">
         <button @click="drawer">
           <svg
