@@ -19,12 +19,12 @@
       <div class="hidden md:block">
         <ul class="flex space-x-8 text-sm font-sans">
           <li><a href="/" class="">🏠 Home</a></li>
-          <li><a href="#" class="">Features</a></li>
-          <li><a href="#" class="">FAQ</a></li>
           <li><a href="#" class="">Contact</a></li>
           <!-- sementara aja -->
-          <li><NuxtLink to="/posts/create" class="py-2 px-3 mt-3 min-w-[13rem] bg-accent-9 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200">
-            Create Post +</NuxtLink></li>
+          <li><NuxtLink to="/posts/category" >
+            Create Category</NuxtLink></li>
+          <li><NuxtLink to="/posts/create"  >
+            Create Post</NuxtLink></li>
           <li><a href="#"
             class="py-2 px-3 mt-3 min-w-[13rem] bg-accent-2 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200">Sign Up</a></li>
         </ul>
@@ -58,10 +58,11 @@
 
         <ul class="divide-y font-sans">
           <li><a href="/" @click="isOpen = false" class="my-4 inline-block">🏠 Home</a></li>
-          <li><a href="#" @click="isOpen = false" class="my-4 inline-block">Features</a></li>
-          <li><a href="#" @click="isOpen = false" class="my-4 inline-block">FAQ</a></li>
           <li><a href="#" @click="isOpen = false" class="my-4 inline-block">Contact</a></li>
-          <li><NuxtLink to="/posts/create" class="my-8 w-full text-center font-semibold cta inline-block bg-accent-9 hover:bg-green-900 px-3 py-2 rounded text-white">
+                 <!-- sementara aja -->
+          <li><NuxtLink to="/posts/category" class="py-2 px-3 mt-3 min-w-[13rem] bg-accent-1 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200">
+            Create Category +</NuxtLink></li>
+          <li><NuxtLink to="/posts/create" class="py-2 px-3 mt-3 min-w-[13rem] bg-accent-9 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200">
             Create Post +</NuxtLink></li>
           <li><a href="#" @click="isOpen = false" class="my-8 w-full text-center font-semibold cta inline-block bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded text-white">Sign Up</a></li>
         </ul>

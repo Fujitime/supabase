@@ -59,15 +59,15 @@
             </template>
           </li>
         </ul>
+
       </div>
     </div>
   </div>
 </template>
-
-
 <script>
 import axios from 'axios';
 import Navbar from '~/components/Navbar.vue';
+import Swal from 'sweetalert2';
 
 export default {
   components: {
@@ -79,84 +79,109 @@ export default {
       category: '',
       categories: [],
       editingCategoryId: null,
+      currentCategoryIndex: 0,
     };
   },
   methods: {
-    newCategory() {
-      if (this.category.trim() !== '') {
-        axios
-          .post(
-            'https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories',
-            JSON.stringify({
-              name: this.category,
-            }),
-            {
-              headers: {
-                'apikey': this.$config.apikey,
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          .then(() => {
-            this.allCategories();
-          });
-      }
-    },
-    editCategory(category) {
-      this.editingCategoryId = category.category_id;
-    },
-    saveEdit(category) {
-      axios
-        .patch(
-          `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${category.category_id}`,
-          JSON.stringify({
-            name: category.name,
-          }),
-          {
-            headers: {
-              'apikey': this.$config.apikey,
-              'Content-Type': 'application/json',
-            },
-          }
-        )
-        .then(() => {
-          this.editingCategoryId = null;
-        });
-    },
-    cancelEdit() {
-      this.editingCategoryId = null;
-      this.allCategories();
-    },
-    deleteCategory(id) {
-      axios
-        .delete(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${id}`, {
-          headers: {
-            'apikey': this.$config.apikey,
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(() => {
-          this.allCategories();
-        });
-    },
-    allCategories() {
-      axios
-        .get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
+    async fetchCategories() {
+      try {
+        const response = await axios.get("https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories", {
           headers: {
             'apikey': this.$config.apikey,
             'content-type': 'application/json',
           },
-        })
-        .then(({ data }) => {
-          this.categories = data;
-        })
-        .catch(() => {
-          this.categories = [];
         });
+        this.categories = response.data;
+        this.currentCategoryIndex = 0;
+        this.fetchCategoryDetails();
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    },
+    async fetchCategoryDetails() {
+      if (this.currentCategoryIndex < this.categories.length) {
+        const category = this.categories[this.currentCategoryIndex];
+        try {
+          const response = await axios.get(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${category.category_id}`, {
+            headers: {
+              'apikey': this.$config.apikey,
+              'content-type': 'application/json',
+            },
+          });
+          this.categories[this.currentCategoryIndex] = response.data[0];
+        } catch (error) {
+          console.error("Error fetching category details:", error);
+        }
+        this.currentCategoryIndex++;
+        this.fetchCategoryDetails();
+      }
+    },
+    async newCategory() {
+  if (this.category.trim() !== '') {
+    const existingCategory = this.categories.find(cat => cat.name.toLowerCase() === this.category.trim().toLowerCase());
+    if (existingCategory) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Category Already Exists',
+        text: 'The entered category already exists.',
+      });
+    } else {
+      // Category is new, add it
+      await this.addCategory(this.category);
+      this.fetchCategories();
+    }
+  }
+},
+    editCategory(category) {
+      this.editingCategoryId = category.category_id;
+    },
+    async saveEdit(category) {
+      await this.updateCategory(category);
+      this.editingCategoryId = null;
+    },
+    async cancelEdit() {
+      this.editingCategoryId = null;
+      await this.fetchCategories();
+    },
+    async deleteCategory(id) {
+      await this.removeCategory(id);
+      this.fetchCategories();
+    },
+    async addCategory(name) {
+      await axios.post(
+        'https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories',
+        JSON.stringify({ name }),
+        {
+          headers: {
+            'apikey': this.$config.apikey,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    },
+    async updateCategory(category) {
+      await axios.patch(
+        `https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${category.category_id}`,
+        JSON.stringify({ name: category.name }),
+        {
+          headers: {
+            'apikey': this.$config.apikey,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    },
+    async removeCategory(id) {
+      await axios.delete(`https://ptbhetsbqexqdpwfmmdg.supabase.co/rest/v1/categories?category_id=eq.${id}`, {
+        headers: {
+          'apikey': this.$config.apikey,
+          'Content-Type': 'application/json',
+        },
+      });
     },
   },
-  created() {
-    this.allCategories();
+  async created() {
+    await this.fetchCategories();
   },
 };
 </script>
