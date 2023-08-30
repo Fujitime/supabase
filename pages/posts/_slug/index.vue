@@ -27,5 +27,12 @@ export default {
 
     return { postData: postData[0] };
   },
+  head() {
+    return {
+      title: this.postData ? this.postData.title : 'Posts',
+    };
+  },
 };
 </script>
+
+

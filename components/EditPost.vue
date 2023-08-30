@@ -58,6 +58,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: this.editedPost ? `Edited :${this.editedPost.title}` : 'Posts',
+    };
+  },
   methods: {
     async editPost() {
       try {
