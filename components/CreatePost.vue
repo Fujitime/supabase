@@ -30,12 +30,20 @@
             bullist numlist outdent indent | removeformat | help'
         }"
       />
+      <div class="flex justify-between">
+        <NuxtLink
+        to="/"
+        class="py-2 px-3 mt-3 min-w-auto bg-accent-5 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+        >
+        Cancel
+      </NuxtLink>
       <button
         type="submit"
         class="py-2 px-3 mt-3 min-w-[13rem] bg-accent-2 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
       >
-        Save
+        Save Changes
       </button>
+      </div>
     </form>
   </div>
 </template>
@@ -55,6 +63,12 @@ export default {
             },
         };
     },
+    head() {
+      return {
+        title: 'Create Post',
+      };
+  },
+
     methods: {
         async addNewPost() {
             try {
