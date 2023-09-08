@@ -20,12 +20,20 @@
         v-model="editedPost.body"
         :init="tinyMCEInit"
       />
+      <div class="flex justify-between">
+        <NuxtLink
+        to="/"
+        class="py-2 px-3 mt-3 min-w-auto bg-accent-5 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+        >
+        Cancel
+      </NuxtLink>
       <button
         type="submit"
         class="py-2 px-3 mt-3 min-w-[13rem] bg-accent-2 border border-black rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
       >
         Save Changes
       </button>
+      </div>
     </form>
   </div>
 </template>
@@ -48,6 +56,11 @@ export default {
         title: '',
         body: '',
       },
+    };
+  },
+  head() {
+    return {
+      title: this.editedPost ? `Edited :${this.editedPost.title}` : 'Posts',
     };
   },
   methods: {
